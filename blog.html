@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title id="pageTitle">광고정보 | 동아광고</title>
+<meta name="description" id="pageDesc" content="순천 간판, 현수막, 실사출력 관련 정보를 안내합니다.">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .post-hero{padding:150px 0 30px}
+  .post-hero .cat{font-size:12.5px;font-weight:700;color:var(--accent-ink)}
+  .post-hero h1{margin-top:14px;font-size:clamp(24px,4vw,36px);font-weight:800;line-height:1.35}
+  .post-thumb{aspect-ratio:16/8;background:var(--paper-soft);border-radius:var(--radius);overflow:hidden;margin:24px 0 8px}
+  .post-thumb img{width:100%;height:100%;object-fit:cover}
+  .post-body{max-width:760px;margin:24px auto 80px;font-size:16px;line-height:1.95;color:var(--ink-soft)}
+  .post-body h2{color:var(--ink);font-size:21px;margin:36px 0 12px}
+  .post-body p{margin-bottom:16px}
+  .back-link{display:inline-flex;gap:6px;font-size:13.5px;font-weight:700;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<header class="site-header is-light">
+  <div class="container">
+    <a href="/" class="logo">DONG<strong>·</strong>A AD</a>
+    <nav class="nav-desktop">
+      <a class="nav-link" href="index.html#services">서비스</a>
+      <a class="nav-link" href="index.html#portfolio">시공사례</a>
+      <a class="nav-link" href="index.html#blog">광고정보</a>
+      <a class="nav-link" href="index.html#inquiry">견적문의</a>
+    </nav>
+    <div class="header-actions"><a href="index.html#inquiry" class="btn btn-primary btn-sm">견적문의</a></div>
+  </div>
+</header>
+
+<div class="container post-hero">
+  <a class="back-link" href="index.html#blog">&larr; 광고정보 목록으로</a>
+  <div id="postRoot"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-logo">DONG·A AD</div>
+      <nav class="footer-nav"><a href="index.html#inquiry">견적문의</a><a href="admin.html">관리자</a></nav>
+    </div>
+    <div class="footer-meta">&copy; <span id="footerYear"></span> DONG-A AD. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-client.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+  const slug = new URLSearchParams(location.search).get('slug');
+  const root = document.getElementById('postRoot');
+  let supabaseReady = false;
+  try { supabaseReady = typeof SUPABASE_URL === 'string' && SUPABASE_URL.startsWith('http'); } catch(e){}
+  if (!slug || !supabaseReady){
+    root.innerHTML = `<div style="padding:40px 0;color:var(--ink-faint)">글을 찾을 수 없습니다.</div>`;
+    return;
+  }
+  const { data: post, error } = await sb.from('blog_posts').select('*').eq('slug', slug).eq('is_published', true).single();
+  if (error || !post){
+    root.innerHTML = `<div style="padding:40px 0;color:var(--ink-faint)">글을 찾을 수 없습니다.</div>`;
+    return;
+  }
+  document.getElementById('pageTitle').textContent = `${post.title} | 동아광고`;
+  document.getElementById('pageDesc').setAttribute('content', post.meta_description || '');
+  const thumb = post.thumbnail_url ? publicMediaUrl(post.thumbnail_url) : null;
+  root.innerHTML = `
+    <span class="cat">${post.category || '광고정보'}</span>
+    <h1>${post.title}</h1>
+    ${thumb ? `<div class="post-thumb"><img src="${thumb}" alt="${post.title}"></div>` : ''}
+    <div class="post-body">${post.content}</div>
+  `;
+});
+</script>
+</body>
+</html>

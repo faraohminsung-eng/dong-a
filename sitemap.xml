@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://example.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://example.com/index.html#services</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://example.com/index.html#portfolio</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://example.com/index.html#blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://example.com/index.html#inquiry</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <!--
+    시공사례(portfolio.html?id=...)와 광고정보(blog.html?slug=...)는
+    Supabase에 데이터가 등록된 뒤 실제 URL로 채워 넣거나,
+    운영 단계에서 서버사이드로 자동 생성하는 것을 권장합니다.
+  -->
+</urlset>

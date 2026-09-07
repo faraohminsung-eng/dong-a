@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>관리자 | 동아광고</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body{background:var(--paper-soft)}
+  .admin-shell{max-width:1080px;margin:0 auto;padding:32px 20px 100px}
+  .admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+  .admin-top h1{font-size:20px;font-weight:800}
+  .admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+  .admin-tab{padding:10px 16px;border-radius:999px;font-size:13.5px;font-weight:700;background:#fff;border:1px solid var(--line);color:var(--ink-soft)}
+  .admin-tab.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .admin-panel{display:none}
+  .admin-panel.is-active{display:block}
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;margin-bottom:18px}
+  .card h3{font-size:15px;font-weight:800;margin-bottom:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12.5px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)}
+  .field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius);font-size:14px;font-family:inherit}
+  .field textarea{min-height:80px}
+  .row-list{display:flex;flex-direction:column;gap:10px}
+  .row-item{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;background:#fafaf9}
+  .row-item .thumb{width:56px;height:56px;border-radius:4px;background:var(--paper-soft);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink-faint);text-align:center}
+  .row-item .thumb img{width:100%;height:100%;object-fit:cover}
+  .row-item .meta{flex:1;min-width:0}
+  .row-item .meta .t{font-weight:700;font-size:14px}
+  .row-item .meta .s{font-size:12px;color:var(--ink-faint);margin-top:2px}
+  .row-actions{display:flex;gap:8px;flex-shrink:0}
+  .row-actions button{font-size:12px;font-weight:700;padding:7px 12px;border-radius:4px;border:1px solid var(--line)}
+  .row-actions .danger{color:#a12727;border-color:#f0c9c9}
+  .status-badge{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--paper-soft)}
+  .login-box{max-width:360px;margin:120px auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px}
+  .login-box h1{font-size:18px;font-weight:800;margin-bottom:20px}
+  .msg{font-size:12.5px;margin-top:8px}
+  .msg.err{color:#a12727}
+  .msg.ok{color:#2b6b2b}
+  .hint{font-size:12px;color:var(--ink-faint);margin-top:6px}
+  .toolbar{display:flex;justify-content:flex-end;gap:8px;margin-bottom:14px}
+  select.status-select{font-size:12px;padding:6px 8px}
+</style>
+</head>
+<body>
+
+<div id="loginView" class="login-box">
+  <h1>동아광고 관리자 로그인</h1>
+  <div class="field"><label>이메일</label><input type="email" id="loginEmail"></div>
+  <div class="field"><label>비밀번호</label><input type="password" id="loginPassword"></div>
+  <button class="btn btn-dark" style="width:100%" id="loginBtn">로그인</button>
+  <div class="msg err" id="loginMsg"></div>
+  <p class="hint">관리자 계정은 Supabase 대시보드 &gt; Authentication 에서 직접 생성하세요.</p>
+</div>
+
+<div id="adminView" class="admin-shell" style="display:none">
+  <div class="admin-top">
+    <h1>동아광고 관리자</h1>
+    <div style="display:flex;gap:10px">
+      <a href="index.html" class="btn btn-ghost btn-sm" target="_blank">사이트 보기</a>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="admin-tab is-active" data-panel="panelHero">HERO 관리</button>
+    <button class="admin-tab" data-panel="panelPortfolio">시공사례 관리</button>
+    <button class="admin-tab" data-panel="panelInquiry">문의 관리</button>
+    <button class="admin-tab" data-panel="panelTestimonial">고객후기 관리</button>
+    <button class="admin-tab" data-panel="panelBlog">광고정보 관리</button>
+    <button class="admin-tab" data-panel="panelSettings">사이트 설정</button>
+  </div>
+
+  <!-- HERO -->
+  <div class="admin-panel is-active" id="panelHero">
+    <div class="card">
+      <h3>새 HERO 슬라이드 추가</h3>
+      <div class="grid2">
+        <div class="field"><label>문구 (헤드라인) *</label><input type="text" id="heroHeadline"></div>
+        <div class="field"><label>서브문구</label><input type="text" id="heroSubtext"></div>
+        <div class="field"><label>버튼1 문구</label><input type="text" id="heroBtn1Text" value="무료 견적문의"></div>
+        <div class="field"><label>버튼1 링크</label><input type="text" id="heroBtn1Link" value="#inquiry"></div>
+        <div class="field"><label>버튼2 문구 (선택)</label><input type="text" id="heroBtn2Text"></div>
+        <div class="field"><label>버튼2 링크 (선택)</label><input type="text" id="heroBtn2Link"></div>
+      </div>
+      <div class="field"><label>배경 사진</label><input type="file" id="heroImageFile" accept="image/*"></div>
+      <button class="btn btn-dark btn-sm" id="heroAddBtn">추가</button>
+      <div class="msg" id="heroMsg"></div>
+    </div>
+    <div class="card">
+      <h3>등록된 슬라이드 (드래그 대신 순서 숫자 수정 후 저장)</h3>
+      <div class="row-list" id="heroList"></div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <div class="admin-panel" id="panelPortfolio">
+    <div class="card">
+      <h3>새 시공사례 추가</h3>
+      <div class="grid2">
+        <div class="field"><label>프로젝트명 *</label><input type="text" id="pfTitle"></div>
+        <div class="field"><label>카테고리 *</label>
+          <select id="pfCategory">
+            <option>간판</option><option>현수막</option><option>실사출력</option><option>썬팅</option>
+            <option>기업</option><option>음식점</option><option>카페</option><option>병원</option><option>학원</option><option>기타</option>
+          </select>
+        </div>
+        <div class="field"><label>지역</label><input type="text" id="pfRegion" placeholder="예: 순천 ○○동"></div>
+        <div class="field"><label>광고종류(세부)</label><input type="text" id="pfService" placeholder="예: LED 채널간판"></div>
+      </div>
+      <div class="field"><label>제작내용 설명</label><textarea id="pfDesc"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label>BEFORE 사진</label><input type="file" id="pfBeforeFile" accept="image/*"></div>
+        <div class="field"><label>AFTER 사진</label><input type="file" id="pfAfterFile" accept="image/*"></div>
+      </div>
+      <button class="btn btn-dark btn-sm" id="pfAddBtn">추가</button>
+      <div class="msg" id="pfMsg"></div>
+    </div>
+    <div class="card">
+      <h3>등록된 시공사례</h3>
+      <div class="row-list" id="pfList"></div>
+    </div>
+  </div>
+
+  <!-- INQUIRY -->
+  <div class="admin-panel" id="panelInquiry">
+    <div class="card">
+      <h3>견적문의 접수 목록</h3>
+      <div class="row-list" id="inqList"></div>
+    </div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <div class="admin-panel" id="panelTestimonial">
+    <div class="card">
+      <h3>새 고객후기 추가 (실제 후기만 등록해주세요)</h3>
+      <div class="grid2">
+        <div class="field"><label>고객명 (선택)</label><input type="text" id="tsName"></div>
+        <div class="field"><label>후기 사진</label><input type="file" id="tsImageFile" accept="image/*"></div>
+      </div>
+      <div class="field"><label>후기 내용 *</label><textarea id="tsContent"></textarea></div>
+      <button class="btn btn-dark btn-sm" id="tsAddBtn">추가</button>
+      <div class="msg" id="tsMsg"></div>
+    </div>
+    <div class="card">
+      <h3>등록된 후기</h3>
+      <div class="row-list" id="tsList"></div>
+    </div>
+  </div>
+
+  <!-- BLOG -->
+  <div class="admin-panel" id="panelBlog">
+    <div class="card">
+      <h3>새 광고정보 글 추가</h3>
+      <div class="grid2">
+        <div class="field"><label>제목 *</label><input type="text" id="bgTitle"></div>
+        <div class="field"><label>슬러그(영문 URL) *</label><input type="text" id="bgSlug" placeholder="suncheon-led-sign"></div>
+        <div class="field"><label>카테고리</label><input type="text" id="bgCategory" placeholder="간판정보"></div>
+        <div class="field"><label>썸네일</label><input type="file" id="bgThumbFile" accept="image/*"></div>
+      </div>
+      <div class="field"><label>메타 설명(검색결과 요약)</label><input type="text" id="bgMetaDesc"></div>
+      <div class="field"><label>본문 (HTML 가능)</label><textarea id="bgContent" style="min-height:160px"></textarea></div>
+      <button class="btn btn-dark btn-sm" id="bgAddBtn">추가</button>
+      <div class="msg" id="bgMsg"></div>
+    </div>
+    <div class="card">
+      <h3>등록된 글</h3>
+      <div class="row-list" id="bgList"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="admin-panel" id="panelSettings">
+    <div class="card">
+      <h3>연락처 / 사이트 정보</h3>
+      <div class="grid2">
+        <div class="field"><label>전화번호</label><input type="text" id="setPhone" placeholder="062-000-0000"></div>
+        <div class="field"><label>영업시간</label><input type="text" id="setHours" placeholder="평일 09:00 - 18:00"></div>
+        <div class="field"><label>주소</label><input type="text" id="setAddress" placeholder="전남 순천시 ..."></div>
+        <div class="field"><label>서비스 지역 (쉼표구분)</label><input type="text" id="setAreas" placeholder="순천,광양,여수,전남"></div>
+        <div class="field"><label>카카오톡 채널 링크</label><input type="text" id="setKakao"></div>
+        <div class="field"><label>인스타그램</label><input type="text" id="setInstagram"></div>
+        <div class="field"><label>지도 위도(lat)</label><input type="text" id="setLat"></div>
+        <div class="field"><label>지도 경도(lng)</label><input type="text" id="setLng"></div>
+      </div>
+      <button class="btn btn-dark btn-sm" id="setSaveBtn">저장</button>
+      <div class="msg" id="setMsg"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

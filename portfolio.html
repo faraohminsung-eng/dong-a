@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title id="pageTitle">시공사례 | 동아광고</title>
+<meta name="description" id="pageDesc" content="동아광고 시공사례">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .detail-hero{position:relative;height:56vh;min-height:340px;background:var(--dark);margin-top:0}
+  .detail-hero img{width:100%;height:100%;object-fit:cover}
+  .detail-hero .hero-placeholder{position:absolute;inset:0}
+  .detail-hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.65));display:flex;align-items:flex-end}
+  .detail-hero-info{padding:40px 0;color:#fff}
+  .detail-hero-info .tag{display:inline-block;background:var(--accent);padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:14px}
+  .detail-hero-info h1{font-size:clamp(24px,4vw,38px);font-weight:800}
+  .detail-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:44px 0;border-bottom:1px solid var(--line)}
+  .detail-meta dt{font-size:12px;font-weight:700;color:var(--ink-faint);letter-spacing:.06em;margin-bottom:8px}
+  .detail-meta dd{margin:0;font-size:16px;font-weight:700}
+  .process-mini{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:36px 0;font-size:13px;font-weight:700;color:var(--ink-soft)}
+  .process-mini span.step{padding:8px 16px;border:1px solid var(--line);border-radius:999px}
+  .process-mini span.arrow{color:var(--ink-faint)}
+  .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:20px 0 44px}
+  .ba-item{border-radius:var(--radius);overflow:hidden;background:var(--paper-soft);aspect-ratio:4/3;position:relative}
+  .ba-item img{width:100%;height:100%;object-fit:cover}
+  .ba-label{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px}
+  @media (max-width:680px){.ba-grid,.detail-meta{grid-template-columns:1fr}}
+  .desc-block{padding:8px 0 44px;font-size:15.5px;color:var(--ink-soft);line-height:1.9;max-width:760px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--ink-soft);margin:100px 0 0}
+</style>
+</head>
+<body>
+
+<header class="site-header is-light">
+  <div class="container">
+    <a href="/" class="logo">DONG<strong>·</strong>A AD</a>
+    <nav class="nav-desktop">
+      <a class="nav-link" href="index.html#about">회사소개</a>
+      <a class="nav-link" href="index.html#services">서비스</a>
+      <a class="nav-link" href="index.html#portfolio">시공사례</a>
+      <a class="nav-link" href="index.html#testimonial">고객후기</a>
+      <a class="nav-link" href="index.html#blog">광고정보</a>
+      <a class="nav-link" href="index.html#inquiry">견적문의</a>
+    </nav>
+    <div class="header-actions">
+      <a href="index.html#inquiry" class="btn btn-primary btn-sm">견적문의</a>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <a class="back-link" href="index.html#portfolio">&larr; 시공사례 목록으로</a>
+</div>
+
+<div id="detailRoot">
+  <!-- JS로 렌더링 -->
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-logo">DONG·A AD</div>
+      <nav class="footer-nav">
+        <a href="index.html#about">회사소개</a>
+        <a href="index.html#inquiry">견적문의</a>
+        <a href="admin.html">관리자</a>
+      </nav>
+    </div>
+    <div class="footer-meta">&copy; <span id="footerYear"></span> DONG-A AD. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/portfolio-detail.js"></script>
+</body>
+</html>
