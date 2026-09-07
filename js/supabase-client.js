@@ -4,8 +4,8 @@
 // 2) 아래 두 값을 자신의 프로젝트 값으로 바꿔주세요.
 //    Supabase 대시보드 > Project Settings > API 에서 확인 가능
 // ============================================================
-const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://pctvoksmfwtrviwklqsp.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_YdwujTeMyo2s-FLbcvYYUw_qotej9ZC';
 
 // 아직 설정 전(플레이스홀더 값)이면 클라이언트를 만들지 않고 넘어갑니다.
 // 각 페이지의 스크립트는 SUPABASE_URL이 http(s)로 시작하는지 확인한 뒤에만 sb를 사용합니다.

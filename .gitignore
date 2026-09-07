@@ -1,0 +1,6 @@
+.supabase_db_password.txt
+.admin_password.txt
+.api_keys.json
+.env
+.env.local
+supabase/.temp/

@@ -20,18 +20,24 @@ SUPABASE_SEED_BLOG.sql  일반 정보성 블로그 글 3개 (선택 실행)
 robots.txt / sitemap.xml
 ```
 
-## 처음 설정하는 방법 (반드시 필요)
+## Supabase 설정 상태 (완료됨)
 
-1. **Supabase 프로젝트 생성**: https://supabase.com 에서 새 프로젝트를 만듭니다.
-2. **스키마 실행**: Supabase 대시보드 > SQL Editor 에서 `SUPABASE_SCHEMA.sql` 전체를 실행합니다.
-   (선택) `SUPABASE_SEED_BLOG.sql`도 실행하면 일반 정보성 글 3개가 미리 채워집니다.
-3. **Storage 버킷 생성**: Storage 메뉴에서 `dongah-ad-media` 라는 이름의 **Public** 버킷을 만듭니다.
-4. **연결 정보 입력**: `js/supabase-client.js`의 `SUPABASE_URL`, `SUPABASE_ANON_KEY`를
-   Project Settings > API 에서 확인한 값으로 바꿉니다.
-5. **관리자 계정 생성**: Authentication > Users 에서 관리자용 이메일/비밀번호 계정을 하나 만듭니다.
-   (이 계정으로 `admin.html`에 로그인합니다.)
-6. 로컬에서 확인하려면 `index.html`을 정적 서버로 띄우면 됩니다 (예: VSCode Live Server, `npx serve` 등).
-   `file://`로 그냥 열어도 대부분 동작하지만, Storage 업로드 등은 실제 배포 도메인에서 테스트하는 것을 권장합니다.
+Supabase 프로젝트 생성부터 스키마·Storage·관리자 계정까지 이미 적용되어 있습니다.
+
+- 프로젝트: `dongah-ad` (organization: faraohminsung-eng's Org, region: ap-northeast-2 Seoul)
+- `SUPABASE_SCHEMA.sql`, `SUPABASE_SEED_BLOG.sql`, `SUPABASE_STORAGE.sql` 전부 적용 완료
+- Storage 버킷 `dongah-ad-media` (public) 생성 완료
+- `js/supabase-client.js`에 실제 URL/키 입력 완료
+- 관리자 로그인 계정 생성 완료 (이메일 `faraoh@naver.com`) — 초기 비밀번호는 채팅으로 별도 전달, **로그인 후 Supabase 대시보드 Authentication에서 바로 변경 권장**
+- DB 비밀번호(직접 Postgres 접속용, 평소엔 안 씀)는 로컬 `.supabase_db_password.txt`에 저장 (git에는 안 올라감)
+
+추가로 만들고 싶은 게 있으면(예: 관리자 계정 추가) Supabase 대시보드 > Authentication > Users 에서 직접 추가하시면 됩니다.
+
+## 로컬에서 확인하는 방법
+
+`index.html`을 정적 서버로 띄우면 됩니다 (예: VSCode Live Server, `npx serve` 등).
+`file://`로 그냥 열어도 대부분 동작하지만, Storage 업로드 등은 실제 배포 도메인에서 테스트하는 것을 권장합니다.
+배포된 사이트: https://faraohminsung-eng.github.io/dong-a/
 
 ## 지금 당장 채워야 할 실제 정보 (제가 임의로 만들지 않은 항목)
 
