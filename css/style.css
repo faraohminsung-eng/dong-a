@@ -193,6 +193,12 @@ section{padding:96px 0}
 @media (max-width:960px){.portfolio-grid{column-count:2}}
 @media (max-width:600px){.portfolio-grid{column-count:1}}
 
+@media (max-width:600px){
+  .portfolio-filters{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:2px;margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px;scrollbar-width:none}
+  .portfolio-filters::-webkit-scrollbar{display:none}
+  .filter-btn{flex:0 0 auto}
+}
+
 .pf-card{
   break-inside:avoid;margin-bottom:18px;position:relative;overflow:hidden;border-radius:var(--radius);
   background:var(--paper-soft);display:block;
@@ -304,6 +310,24 @@ section{padding:96px 0}
 @media (max-width:960px){.inquiry-wrap{grid-template-columns:1fr;gap:40px}}
 @media (max-width:560px){.form-row{grid-template-columns:1fr}.form-card{padding:24px}}
 
+/* ---------------- 견적문의 단계별 진행형 폼 (모바일 전용) ---------------- */
+.wizard-progress{display:none;gap:6px;margin-bottom:22px}
+.wizard-progress .seg{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.wizard-progress .seg.on{background:var(--accent)}
+.wizard-nav{display:none;gap:10px;margin-top:4px}
+.wizard-nav .wizard-prev{flex:0 0 92px}
+.wizard-nav .wizard-next{flex:1}
+@media (max-width:780px){
+  .form-card.is-wizard .wizard-progress{display:flex}
+  .form-card.is-wizard .wizard-step{display:none}
+  .form-card.is-wizard .wizard-step.is-active{display:block}
+  .form-card.is-wizard .wizard-nav{display:flex}
+  .form-card.is-wizard .form-submit{display:none}
+  .form-card.is-wizard .wizard-step[data-step="3"].is-active ~ .form-submit{display:flex}
+  .form-card.is-wizard .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .form-card.is-wizard .check-pill span{display:flex;justify-content:center;padding:16px 10px;border-radius:4px;font-size:14px}
+}
+
 /* ---------------- Location ---------------- */
 .location-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:stretch}
 .location-map{background:var(--paper-soft);border-radius:var(--radius);min-height:340px;display:flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:13px;border:1px solid var(--line)}
@@ -322,16 +346,27 @@ section{padding:96px 0}
 .footer-meta{margin-top:24px;font-size:12.5px;line-height:2}
 @media (max-width:780px){.footer-top{flex-direction:column}}
 
-/* ---------------- Mobile bottom nav ---------------- */
-.mobile-bar{
+/* ---------------- Mobile 하단 탭바 + 플로팅 전화버튼 ---------------- */
+.mobile-tabbar{
   position:fixed;left:0;right:0;bottom:0;z-index:900;display:none;
+  grid-template-columns:repeat(4,1fr);
   background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px -12px rgba(0,0,0,.25);
+  padding-bottom:env(safe-area-inset-bottom,0);
 }
-.mobile-bar-inner{display:grid;grid-template-columns:repeat(3,1fr)}
-.mobile-bar a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 0;font-size:11.5px;font-weight:700;color:var(--ink-soft)}
-.mobile-bar a svg{width:20px;height:20px}
-.mobile-bar a.is-accent{color:var(--accent-ink)}
-@media (max-width:780px){.mobile-bar{display:block}}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 12px;font-size:10.5px;font-weight:700;color:var(--ink-faint);transition:color .2s}
+.tab-item svg{width:21px;height:21px}
+.tab-item.is-active{color:var(--accent-ink)}
+.fab-call{
+  position:fixed;right:16px;z-index:901;display:none;
+  bottom:calc(64px + env(safe-area-inset-bottom,0px) + 16px);
+  width:56px;height:56px;border-radius:50%;background:var(--dark);
+  align-items:center;justify-content:center;box-shadow:0 12px 26px -8px rgba(0,0,0,.5);
+}
+.fab-call svg{width:22px;height:22px;color:#fff}
+@media (max-width:780px){
+  .mobile-tabbar{display:grid}
+  .fab-call{display:flex}
+}
 
 /* ---------------- Reveal animation ---------------- */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}

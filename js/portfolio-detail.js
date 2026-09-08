@@ -61,7 +61,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       ${project.description ? `<div class="desc-block">${esc(project.description).replace(/\n/g,'<br>')}</div>` : ''}
 
-      ${(before || after) ? `
+      ${(before && after) ? `
+      <div class="compare-slider" id="compareSlider">
+        <div class="compare-base">${after ? `<img src="${after}" alt="시공 후">` : `<div class="hero-placeholder">AFTER 사진 등록 필요</div>`}</div>
+        <div class="compare-top" id="compareTop">${before ? `<img src="${before}" alt="시공 전">` : `<div class="hero-placeholder">BEFORE 사진 등록 필요</div>`}</div>
+        <span class="compare-label before">BEFORE</span>
+        <span class="compare-label after">AFTER</span>
+        <div class="compare-divider" id="compareDivider"></div>
+        <div class="compare-handle" id="compareHandle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7l-4 5 4 5"/><path d="M16 7l4 5-4 5"/></svg>
+        </div>
+      </div>
+      <div class="compare-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7l-4 5 4 5"/><path d="M16 7l4 5-4 5"/></svg>
+        좌우로 드래그해서 비교
+      </div>` : (before || after) ? `
       <div class="ba-grid">
         <div class="ba-item">
           ${before ? `<img src="${before}" alt="시공 전">` : `<div class="hero-placeholder" style="position:absolute;inset:0">BEFORE 사진 등록 필요</div>`}
@@ -84,7 +98,48 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>` : ''}
     </div>
   `;
+
+  initCompareSlider();
 });
+
+function initCompareSlider(){
+  const slider = document.getElementById('compareSlider');
+  if (!slider) return;
+  const top = document.getElementById('compareTop');
+  const divider = document.getElementById('compareDivider');
+  const handle = document.getElementById('compareHandle');
+  let dragging = false;
+
+  function setPercent(percent){
+    percent = Math.max(0, Math.min(100, percent));
+    top.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    divider.style.left = percent + '%';
+    handle.style.left = percent + '%';
+  }
+  function percentFromEvent(clientX){
+    const rect = slider.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * 100;
+  }
+  function onDown(e){
+    dragging = true;
+    try { slider.setPointerCapture(e.pointerId); } catch(err){}
+    setPercent(percentFromEvent(e.clientX));
+  }
+  function onMove(e){
+    if (!dragging) return;
+    setPercent(percentFromEvent(e.clientX));
+  }
+  function onUp(e){
+    dragging = false;
+    try { slider.releasePointerCapture(e.pointerId); } catch(err){}
+  }
+
+  slider.addEventListener('pointerdown', onDown);
+  slider.addEventListener('pointermove', onMove);
+  slider.addEventListener('pointerup', onUp);
+  slider.addEventListener('pointercancel', onUp);
+  setPercent(50);
+}
 
 function safeUrl(path){
   try { return publicMediaUrl(path); } catch(e){ return path; }

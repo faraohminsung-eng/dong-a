@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSiteSettings();
   initReveal();
   initFooterYear();
+  initMobileTabbar();
+  initQuoteWizard();
 });
 
 /* ---------------- Header ---------------- */
@@ -416,6 +418,81 @@ function initReveal(){
     });
   }, { threshold:0.12 });
   els.forEach(el => io.observe(el));
+}
+
+/* ---------------- 견적문의 단계별 진행형 폼 (모바일 전용) ---------------- */
+function initQuoteWizard(){
+  const form = document.getElementById('inquiryForm');
+  if (!form) return;
+
+  const steps = Array.from(form.querySelectorAll('.wizard-step'));
+  const progress = document.getElementById('wizardProgress');
+  const nav = document.getElementById('wizardNav');
+  const prevBtn = nav?.querySelector('[data-act="prev"]');
+  const nextBtn = nav?.querySelector('[data-act="next"]');
+  const total = steps.length;
+  let current = 1;
+  let wizardOn = false;
+
+  function render(){
+    steps.forEach(s => s.classList.toggle('is-active', Number(s.dataset.step) === current));
+    progress?.querySelectorAll('.seg').forEach(seg => seg.classList.toggle('on', Number(seg.dataset.seg) <= current));
+    if (prevBtn) prevBtn.hidden = current === 1;
+    if (nextBtn) nextBtn.hidden = current === total;
+  }
+
+  function setWizard(on){
+    wizardOn = on;
+    form.classList.toggle('is-wizard', on);
+    if (on){ current = 1; render(); }
+  }
+
+  nextBtn?.addEventListener('click', () => {
+    if (!wizardOn || current >= total) return;
+    current++;
+    render();
+    form.scrollIntoView({ block:'start', behavior:'smooth' });
+  });
+  prevBtn?.addEventListener('click', () => {
+    if (!wizardOn || current <= 1) return;
+    current--;
+    render();
+  });
+
+  // 문의 접수 성공 시 main.js의 form.reset() 호출을 그대로 이용해 1단계로 복귀
+  form.addEventListener('reset', () => {
+    if (wizardOn){ current = 1; render(); }
+  });
+
+  const mq = window.matchMedia('(max-width:780px)');
+  setWizard(mq.matches);
+  const onChange = (e) => setWizard(e.matches);
+  if (mq.addEventListener) mq.addEventListener('change', onChange);
+  else if (mq.addListener) mq.addListener(onChange);
+}
+
+/* ---------------- Mobile 하단 탭바 scroll-spy ---------------- */
+function initMobileTabbar(){
+  const tabs = document.querySelectorAll('.tab-item');
+  if (!tabs.length || !('IntersectionObserver' in window)) return;
+
+  const map = { hero:'home', portfolio:'portfolio', services:'services', inquiry:'inquiry' };
+  const sections = Object.keys(map).map(id => document.getElementById(id)).filter(Boolean);
+  if (!sections.length) return;
+
+  const setActive = (tabName) => {
+    tabs.forEach(t => t.classList.toggle('is-active', t.dataset.tab === tabName));
+  };
+
+  const io = new IntersectionObserver((entries) => {
+    let best = null;
+    entries.forEach(entry => {
+      if (entry.isIntersecting && (!best || entry.intersectionRatio > best.intersectionRatio)) best = entry;
+    });
+    if (best) setActive(map[best.target.id]);
+  }, { rootMargin: '-35% 0px -50% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+
+  sections.forEach(s => io.observe(s));
 }
 
 function initFooterYear(){
